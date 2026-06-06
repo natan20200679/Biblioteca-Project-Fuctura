@@ -5,7 +5,7 @@ from biblioteca.views import (login_view, register_view, dashboard, visualizar_l
 urlpatterns = [
     path('', login_view, name='login'),
     path('login/', login_view, name='login'),
-    path('logout/', login_view, name='logout'),
+    path('login/', login_view, name='logout'),
     path('register/', register_view, name='register'),
     path('dashboard/', dashboard, name='dashboard'),
     path('livros/', visualizar_livros, name='livros'),
