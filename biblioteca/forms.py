@@ -5,12 +5,12 @@ from django.contrib.auth.models import User
 class LivroForm(forms.ModelForm):
     class Meta:
         model = Livro
-        fields = ['titulo', 'autor', 'descricao', 'ano']
+        fields = ['id', 'titulo', 'autor', 'descricao', 'ano']
 
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['nome', 'email', 'telefone']
+        fields = ['id', 'nome', 'email', 'telefone']
 
 class EmprestimoForm(forms.ModelForm):
     class Meta:
