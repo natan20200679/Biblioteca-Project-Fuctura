@@ -7,6 +7,7 @@
 <div class="titulo">
     <h2>Relação dos Livros</h2>
     <a href="{% url 'cadastrar_livro' %}" class="btn">Cadastrar Livro</a>
+    <a href="{% url 'descadastrar_livro' livro.id %}" class="btn">Descadastrar Livro</a>
 </div>
 <table>
     <tr>
@@ -19,7 +20,7 @@
     {% for livro in livros %}
     <tr>
         <td>
-            <input type="checkbox" name="livro" value="{{ livro.nome }}">
+            <input type="checkbox" name="livro" value="{{ livro.id }}">
         </td>
         <td>{{ livro.titulo }}</td>
         <td>{{ livro.autor }}</td>

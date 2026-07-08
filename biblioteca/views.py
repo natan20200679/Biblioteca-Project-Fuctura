@@ -43,7 +43,15 @@ def cadastrar_livro(request):
             return redirect('livros')
     else:
         form = LivroForm()
-    return render(request, 'biblioteca/cadastrar_livro.html', context={'form': form})
+    return render(request, 'biblioteca/cadastrar_livro.html', {'form': form})
+
+@login_required
+def descadastrar_livro(request, id):
+    livro = get_object_or_404(Livro, id=id)
+    if request.method == 'POST':
+        livro.delete()
+        return redirect('livros')
+    return render(request, 'biblioteca/descadastrar_livro.html', {'livro': livro})
 
 @login_required
 def visualizar_livros(request):
@@ -53,7 +61,7 @@ def visualizar_livros(request):
 @login_required
 def visualizar_usuarios(request):
     usuarios = Usuario.objects.all()
-    return render(request, 'biblioteca/usuarios.html', context={'usuarios': usuarios})
+    return render(request, 'biblioteca/usuarios.html', {'usuarios': usuarios})
 
 @login_required
 def criar_usuario(request):
