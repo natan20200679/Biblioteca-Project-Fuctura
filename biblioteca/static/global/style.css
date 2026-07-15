@@ -36,17 +36,26 @@ main {
 }
 
 .btn {
-    display: block;
-    width: 200px;
-    margin: 20px auto;
-    padding: 10px;
+    display: inline-block !important; /* Alinha os dois na mesma linha horizontal */
+    justify-content: space-between !important;
+    box-sizing: border-box; /* Garante que ambos tenham exatamente 200px */
+    width: 200px !important;
+    padding: 10px !important;
+    margin: 0 5px; /* Altera as margens laterais para criar o gap manualmente */
+
+    /* Reset do comportamento nativo do <button> */
+    border: none;
     background-color: #28a745;
     color: white;
     text-align: center;
     text-decoration: none;
     border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: inherit;
     transition: background-color 0.3s;
 }
+
 
 .btn:hover {
     background-color: #218838;
@@ -54,14 +63,24 @@ main {
 
 .titulo {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 10px;
+    padding: 20px; /* Reduzido de 200px para evitar quebrar o layout */
 }
 
-.titulo h2 {
-    margin: 0;
-    flex-grow: 1;
-    text-align: center;
+.header-container {
+    display: flex;
+    align-items: center; /* Alinha o texto e os botões verticalmente */
 }
 
+.header-container h2 {
+    margin-right: auto; /* Empurra os botões para a extrema direita */
+}
+
+.header-container .btn {
+    margin-left: 10px; /* Mantém o gap/espaçamento entre os botões */
+}
+
+.header-container .btn:last-child {
+    background-color: red;
+}
