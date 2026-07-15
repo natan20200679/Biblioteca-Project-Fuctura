@@ -74,10 +74,6 @@ def descadastrar_livros_lote(request):
     messages.success(request, f"{quantidade} livro(s) removido(s) com sucesso.")
     return redirect("livros")
 
-
-
-
-
 @login_required
 def visualizar_livros(request):
     livros = Livro.objects.all()
