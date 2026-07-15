@@ -1,32 +1,47 @@
 {% extends 'biblioteca/base.html' %}
 {% load static %}
+
 {% block extra_styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'tabelas/tabelas.css' %}">
 {% endblock %}
+
 {% block content %}
-<div class="titulo">
-    <h2>Relação dos Livros</h2>
-    <a href="{% url 'cadastrar_livro' %}" class="btn">Cadastrar Livro</a>
-{#    <a href="{% url 'descadastrar_livro' livro.id %}" class="btn">Descadastrar Livro</a>#}
-</div>
-<table>
-    <tr>
-        <th>Seleção</th>
-        <th>Título</th>
-        <th>Autor</th>
-        <th>Descrição</th>
-        <th>Ano</th>
-    </tr>
-    {% for livro in livros %}
-    <tr>
-        <td>
-            <input type="checkbox" name="livro" value="{{ livro.id }}">
-        </td>
-        <td>{{ livro.titulo }}</td>
-        <td>{{ livro.autor }}</td>
-        <td>{{ livro.descricao }}</td>
-        <td>{{ livro.ano }}</td>
-    </tr>
-    {% endfor %}
-</table>
+<!-- O formulário envolve todo o conteúdo de seleção e envio -->
+<form action="{% url 'descadastrar_livros_lote' %}" method="POST">
+    {% csrf_token %}
+
+    <div class="header-container">
+        <h2>Relação dos Livros</h2>
+        <a href="{% url 'cadastrar_livro' %}" class="btn">Cadastrar Livro</a>
+        <!-- O botão agora é do tipo submit para disparar o formulário -->
+        <button
+            type="submit"
+            class="btn"
+            onclick="return confirm('Deseja realmente descadastrar os livros selecionados?')">
+            Descadastrar Selecionados
+        </button>
+    </div>
+
+    <table>
+        <tr>
+            <th>Seleção</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Descrição</th>
+            <th>Ano</th>
+        </tr>
+        {% for livro in livros %}
+        <tr>
+            <td>
+                <!-- Todos os checkboxes compartilham o mesmo nome 'livros_ids' -->
+                <input type="checkbox" name="livros_ids" value="{{ livro.id }}">
+            </td>
+            <td>{{ livro.titulo }}</td>
+            <td>{{ livro.autor }}</td>
+            <td>{{ livro.descricao }}</td>
+            <td>{{ livro.ano }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</form>
 {% endblock %}
