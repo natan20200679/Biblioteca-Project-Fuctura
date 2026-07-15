@@ -1,0 +1,26 @@
+{% extends 'biblioteca/base.html' %}
+
+{% block content %}
+<div class="confirm-container">
+    <h2>Confirmação de Descadastramento</h2>
+    <p>Você tem certeza que deseja descadastrar os seguintes livros?</p>
+
+    <ul>
+        {% for livro in livros_para_deletar %}
+            <li><strong>{{ livro.titulo }}</strong> - {{ livro.autor }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Formulário que executa a deleção real -->
+    <form action="{% url 'deletar_livros_lote_confirmado' %}" method="POST">
+        {% csrf_token %}
+        <!-- Passa os IDs adiante para a view de deleção final -->
+        {% for id in ids_para_deletar %}
+            <input type="hidden" name="livros_ids" value="{{ id }}">
+        {% endfor %}
+
+        <button type="submit" class="btn btn-danger">Sim, Descadastrar</button>
+        <a href="{% url 'livros' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
