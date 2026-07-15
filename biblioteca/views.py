@@ -1,9 +1,12 @@
+from django.contrib import messages
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login, authenticate, logout
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
+
 from .models import Livro, Usuario, Emprestimo
 from .forms import LivroForm, UsuarioForm, EmprestimoForm, UserRegistrationForm
-from django.contrib.auth.decorators import login_required
 
 def login_view(request):
     if request.method == 'POST':
@@ -45,13 +48,35 @@ def cadastrar_livro(request):
         form = LivroForm()
     return render(request, 'biblioteca/cadastrar_livro.html', {'form': form})
 
-# @login_required
-# def descadastrar_livro(request, id):
-#     livro = get_object_or_404(Livro, id=id)
-#     if request.method == 'POST':
-#         livro.delete()
-#         return redirect('livros')
-#     return render(request, 'biblioteca/descadastrar_livro.html', {'livro': livro})
+@login_required
+@require_POST
+def descadastrar_livro(request, id):
+    livro = get_object_or_404(Livro, id=id)
+    if request.method == 'POST':
+        livro.delete()
+        return redirect('livros')
+    return render(request, 'biblioteca/descadastrar_livro.html', {'livro': livro})
+
+@login_required
+@require_POST
+def descadastrar_livros_lote(request):
+    if request.method != "POST":
+        return redirect("livros")
+
+    livros_ids = request.POST.getlist("livros_ids")
+
+    if not livros_ids:
+        messages.warning(request, "Nenhum livro foi selecionado.")
+        return redirect("livros")
+
+    quantidade = Livro.objects.filter(id__in=livros_ids).delete()[0]
+
+    messages.success(request, f"{quantidade} livro(s) removido(s) com sucesso.")
+    return redirect("livros")
+
+
+
+
 
 @login_required
 def visualizar_livros(request):
@@ -64,6 +89,7 @@ def visualizar_usuarios(request):
     return render(request, 'biblioteca/usuarios.html', {'usuarios': usuarios})
 
 @login_required
+@require_POST
 def criar_usuario(request):
     if request.method == 'POST':
         form = UsuarioForm(request.POST)
@@ -75,6 +101,7 @@ def criar_usuario(request):
     return render(request, 'biblioteca/criar_usuario.html', {'form': form})
 
 @login_required
+@require_POST
 def excluir_usuario(request, usuario):
     usuario = get_object_or_404(Usuario, id=usuario)
     if request.method == 'POST':
@@ -83,6 +110,7 @@ def excluir_usuario(request, usuario):
     return render(request, 'biblioteca/usuarios.html', {'usuario': usuario})
 
 @login_required
+@require_POST
 def atualizar_usuarios(request):
     if request.method == "POST":
         usuario_id = request.POST.getlist(key='id')
